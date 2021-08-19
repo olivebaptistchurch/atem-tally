@@ -1,6 +1,6 @@
 const { Atem } = require('atem-connection')
 const net = require('net');
-const { checkProgram, checkPreview } = require('./util/atem_helpers');
+const { handleProgram, handlePreview } = require('./util/atem_helpers');
 const { getAddress, handleError, getMixEffect } = require('./util/helpers');
 
 const myAtem = new Atem()
@@ -16,12 +16,12 @@ switcherAddress
 
 const server = net.createServer((socket) => {
   myAtem.on('connected', () => {
-    socket.write("Connected to switcher");
+    socket.write("Connected to switcher\n");
   })
 
   myAtem.on('stateChanged', (state, pathToChange) => {
-    checkProgram(pathToChange, mixEffect, state, socket) ||
-    checkPreview(pathToChange, mixEffect, state, socket)
+    handleProgram(pathToChange, mixEffect, state, socket) ||
+    handlePreview(pathToChange, mixEffect, state, socket)
   })
 })
 

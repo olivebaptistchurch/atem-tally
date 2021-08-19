@@ -17,18 +17,18 @@ const checkState = (pathToChange, mixEffect, inputType) => (
     .includes(`video.mixEffects.${mixEffect}.${inputType}Input`)
 );
 
-const checkProgram = (pathToChange, mixEffect, state, socket) => (
+const handleProgram = (pathToChange, mixEffect, state, socket) => (
   checkState(pathToChange, mixEffect, "program") 
     && socket.write(`Program: ${programInput(state, mixEffect)}\n`)
 );
 
-const checkPreview = (pathToChange, mixEffect, state, socket) => (
+const handlePreview = (pathToChange, mixEffect, state, socket) => (
   checkState(pathToChange, mixEffect, "preview") 
     && socket.write(`Preview: ${previewInput(state, mixEffect)}\n`)
 );
 
 
 module.exports = {
-  checkProgram,
-  checkPreview
+  handleProgram,
+  handlePreview
 }

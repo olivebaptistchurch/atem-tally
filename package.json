@@ -4,12 +4,15 @@
   "description": "",
   "main": "atem.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "up": "forever start server.js",
+    "down": "forever stop server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "atem-connection": "^2.3.0"
+    "atem-connection": "^2.3.0",
+    "forever": "^4.0.1"
   }
 }
