@@ -1,36 +1,40 @@
 const { Atem } = require('atem-connection')
 const net = require('net');
-
-class AtemExtender extends Atem {
-  constructor() {
-    super();
-    
-  }
-}
-
+const { getAddress, handleError } = require('./util/helpers');
 
 const myAtem = new Atem()
 myAtem.on('info', console.log)
 myAtem.on('error', console.error)
 
-myAtem.connect('10.15.0.104')
+const switcherAddress = getAddress(process.argv);
+const mixEffect = 0;
+
+const programInput = () => (
+  myAtem.state
+    .video
+    .mixEffects[mixEffect]
+    .programInput
+);
+
+const previewInput = () => (
+  myAtem.state
+    .video
+    .mixEffects[mixEffect]
+    .previewInput
+);
+
+switcherAddress
+  ? myAtem.connect(switcherAddress)
+  : handleError("Please pass ip address (xx.xx.xx.xx) as argument");
 
 const server = net.createServer((socket) => {
   myAtem.on('connected', () => {
-    socket.write(`${myAtem
-        .state
-        .video
-        .mixEffects[0]
-        .programInput}`)
+    socket.write("Connected to switcher");
   })
 
   myAtem.on('stateChanged', (state, pathToChange) => {
-    if (pathToChange.includes("video.mixEffects.0.programInput")) {
-      socket.write(`${myAtem
-        .state
-        .video
-        .mixEffects[0]
-        .programInput}`)
+    if (pathToChange.includes(`video.mixEffects.${mixEffect}.programInput`)) {
+      socket.write(`${programInput()}\n`);
     }
   })
 })
