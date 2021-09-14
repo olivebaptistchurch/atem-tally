@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "atem-connection": "^2.3.0",
-    "forever": "^4.0.1"
+    "forever": "^4.0.1",
+    "request": "^2.88.2"
   }
 }

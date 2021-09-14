@@ -1,3 +1,30 @@
 {
-  
+  "relayGPIO": {
+    "1": [14, 15],
+    "2": [18, 23],
+    "3": [24, 25],
+    "4": [8, 7]
+  },
+  "tallySettings": {
+    "1": {
+      "id": "1",
+      "cameraInput": 1,
+      "relayOutput": "1"
+    },
+    "2": {
+      "id": "2",
+      "cameraInput": 2,
+      "relayOutput": "2"
+    },
+    "3": {
+      "id": "3",
+      "cameraInput": 3,
+      "relayOutput": "3"
+    },
+    "4": {
+      "id": "4",
+      "cameraInput": 4,
+      "relayOutput": "4"
+    }
+  }
 }

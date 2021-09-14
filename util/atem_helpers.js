@@ -1,34 +1,20 @@
-const programInput = (state, mixEffect) => (
-  state
-    .video
-    .mixEffects[mixEffect]
-    .programInput
-);
+const programInput = (state, mixEffect) =>
+  state.video.mixEffects[mixEffect].programInput;
 
-const previewInput = (state, mixEffect) => (
-  state
-    .video
-    .mixEffects[mixEffect]
-    .previewInput
-);
+const previewInput = (state, mixEffect) =>
+  state.video.mixEffects[mixEffect].previewInput;
 
-const checkState = (pathToChange, mixEffect, inputType) => (
-  pathToChange
-    .includes(`video.mixEffects.${mixEffect}.${inputType}Input`)
-);
+const checkState = (pathToChange, mixEffect) =>
+  pathToChange.includes(`video.mixEffects.${mixEffect}.programInput`) ||
+  pathToChange.includes(`video.mixEffects.${mixEffect}.previewInput`);
 
-const handleProgram = (pathToChange, mixEffect, state, socket) => (
-  checkState(pathToChange, mixEffect, "program") 
-    && socket.write(`Program: ${programInput(state, mixEffect)}\n`)
-);
+const tallyOutput = (state, mixEffect) =>
+  `${programInput(state, mixEffect)};${previewInput(state, mixEffect)}\n`;
 
-const handlePreview = (pathToChange, mixEffect, state, socket) => (
-  checkState(pathToChange, mixEffect, "preview") 
-    && socket.write(`Preview: ${previewInput(state, mixEffect)}\n`)
-);
-
+const handleInput = (pathToChange, mixEffect, state, socket) =>
+  checkState(pathToChange, mixEffect) &&
+  socket.write(tallyOutput(state, mixEffect));
 
 module.exports = {
-  handleProgram,
-  handlePreview
-}
+  handleInput,
+};

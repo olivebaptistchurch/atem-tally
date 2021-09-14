@@ -1,28 +1,40 @@
-const { Atem } = require('atem-connection')
+const { Atem } = require('atem-connection');
 const net = require('net');
-const { handleProgram, handlePreview } = require('./util/atem_helpers');
-const { getAddress, handleError, getMixEffect } = require('./util/helpers');
+const { handleInput } = require('./util/atem_helpers');
+const {
+  getAddress,
+  handleError,
+  getMixEffect,
+} = require('./util/server_helpers');
 
-const myAtem = new Atem()
-myAtem.on('info', console.log)
-myAtem.on('error', console.error)
+const myAtem = new Atem();
+myAtem.on('info', console.log);
+myAtem.on('error', console.error);
 
 const switcherAddress = getAddress(process.argv);
 const mixEffect = getMixEffect(process.argv) || 0;
 
 switcherAddress
   ? myAtem.connect(switcherAddress)
-  : handleError("Please pass ip address (xx.xx.xx.xx) as argument");
+  : handleError('Please pass ip address (xx.xx.xx.xx) as argument');
 
 const server = net.createServer((socket) => {
+  socket.setKeepAlive(true, 5);
   myAtem.on('connected', () => {
-    socket.write("Connected to switcher\n");
-  })
+    socket.write('Connected to switcher\n');
+  });
 
   myAtem.on('stateChanged', (state, pathToChange) => {
-    handleProgram(pathToChange, mixEffect, state, socket) ||
-    handlePreview(pathToChange, mixEffect, state, socket)
-  })
-})
+    handleInput(pathToChange, mixEffect, state, socket);
+  });
 
-server.listen(59090);
+  socket.on('error', () => {});
+
+  socket.on('end', () => {
+    console.log('Client Disconnected');
+  });
+});
+
+server.listen(59090, () => {
+  console.log('Server running at: localhost:59090');
+});
