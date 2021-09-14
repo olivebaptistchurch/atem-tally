@@ -4,7 +4,7 @@ This is a project that connects to a Black Magic Design (BMD) Atem switcher and 
 
 ## Table of Contents
 
-1. Installation[##installation]
+1. (Installation)[##installation]
 
 ## Installation
 
